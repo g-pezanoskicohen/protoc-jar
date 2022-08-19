@@ -48,7 +48,7 @@ public class ProtocTest
 			assertEquals(0, Protoc.runProtoc(args));
 		}
 		{
-			String[] args = {"--version", "-v3.5.0-SNAPSHOT"}; // not embedded, should trigger download
+			String[] args = {"--version", "-v3.16.1"}; // not embedded, should trigger download
 			assertEquals(0, Protoc.runProtoc(args));
 		}
 	}
@@ -64,10 +64,6 @@ public class ProtocTest
 		}
 		{
 			String[] args = {"--version", "-v:com.github.os72:protoc:3.4.0"};
-			assertEquals(0, Protoc.runProtoc(args));
-		}
-		{
-			String[] args = {"--version", "-v:com.github.os72:protoc:3.4.0-SNAPSHOT"};
 			assertEquals(0, Protoc.runProtoc(args));
 		}
 	}
@@ -87,6 +83,12 @@ public class ProtocTest
 			String[] args = {"-v3.11.4", "--include_std_types", "-I.", "--java_out="+outDir, sStdTypeExampleFile3};
 			assertEquals(0, Protoc.runProtoc(args));
 		}
+		{
+			String outDir = "target/test-protoc-stdtypes";
+			new File(outDir).mkdirs();
+			String[] args = {"-v3.16.1", "--include_std_types", "-I.", "--java_out="+outDir, sStdTypeExampleFile3};
+			assertEquals(0, Protoc.runProtoc(args));
+		}
 	}
 
 	@Test
@@ -98,6 +100,12 @@ public class ProtocTest
 			String[] args = {"-v2.4.1", "--java_out="+outDir, sPersonSchemaFile};
 			assertEquals(0, Protoc.runProtoc(args));
 		}
+		{
+			String outDir = "target/test-protoc";
+			new File(outDir).mkdirs();
+			String[] args = {"-v3.16.1", "--java_out="+outDir, sPersonSchemaFile};
+			assertEquals(0, Protoc.runProtoc(args));
+		}
 	}
 
 	@Test
@@ -107,6 +115,7 @@ public class ProtocTest
 		assertEquals("123", Protoc.getJavaShadingVersion("123"));
 		assertEquals("_3_11_1", Protoc.getJavaShadingVersion("3.11.1"));
 		assertEquals("_3_11_1", Protoc.getJavaShadingVersion("_3_11_1"));
+		assertEquals("_3_16_1", Protoc.getJavaShadingVersion("3.16.1"));
 	}
 
 	@Test
@@ -137,6 +146,13 @@ public class ProtocTest
 			String outDir = "target/test-protoc-shaded-3-11-1";
 			new File(outDir).mkdirs();
 			String[] args = {"-v3.11.1", "--java_shaded_out="+outDir, sPersonSchemaFile};
+			assertEquals(0, Protoc.runProtoc(args));
+			assertHasGeneratedFile(outDir);
+		}
+		{
+			String outDir = "target/test-protoc-shaded-3-16-1";
+			new File(outDir).mkdirs();
+			String[] args = {"-v3.16.1", "--java_shaded_out="+outDir, sPersonSchemaFile};
 			assertEquals(0, Protoc.runProtoc(args));
 			assertHasGeneratedFile(outDir);
 		}
